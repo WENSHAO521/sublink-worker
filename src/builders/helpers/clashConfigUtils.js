@@ -3,6 +3,15 @@ export function emitClashRules(rules = [], translator) {
         throw new Error('emitClashRules requires a translator function');
     }
     const results = [];
+
+    rules
+        .filter(rule => Array.isArray(rule.src_ip_cidr) && rule.src_ip_cidr.length > 0)
+        .forEach(rule => {
+            rule.src_ip_cidr.forEach(cidr => {
+                if (!cidr) return;
+                results.push(`SRC-IP-CIDR,${cidr},${translator('outboundNames.' + rule.outbound)}`);
+            });
+        });
     rules
         .filter(rule => Array.isArray(rule.domain_suffix) && rule.domain_suffix.length > 0)
         .forEach(rule => {
