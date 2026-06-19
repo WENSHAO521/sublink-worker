@@ -11,8 +11,9 @@ export class MemoryKVAdapter {
 
     async put(key, value, options = {}) {
         this.store.set(key, value);
-        if (options.expirationTtl) {
-            this.scheduleExpiration(key, options.expirationTtl);
+        const ttl = normalizeTtl(options.expirationTtl);
+        if (ttl !== null) {
+            this.scheduleExpiration(key, ttl);
         } else {
             this.clearExpiration(key);
         }
@@ -46,4 +47,10 @@ export class MemoryKVAdapter {
             this.clearExpiration(key);
         }
     }
+}
+
+function normalizeTtl(ttl) {
+    if (!ttl && ttl !== 0) return null;
+    const parsed = Math.floor(Number(ttl));
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 }

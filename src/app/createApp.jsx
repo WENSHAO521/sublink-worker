@@ -325,7 +325,11 @@ export function createApp(bindings = {}) {
             const queryString = parsedUrl.search;
 
             const shortLinks = requireShortLinkService(services.shortLinks);
-            const code = await shortLinks.createShortLink(queryString, c.req.query('shortCode'));
+            const providedCode = c.req.query('shortCode');
+            if (providedCode !== undefined && !/^[A-Za-z0-9]{4,64}$/.test(providedCode)) {
+                return c.text('Invalid shortCode format', 400);
+            }
+            const code = await shortLinks.createShortLink(queryString, providedCode);
             return c.text(code);
         } catch (error) {
             return handleError(c, error, runtime.logger);
@@ -335,6 +339,7 @@ export function createApp(bindings = {}) {
     const redirectHandler = (prefix) => async (c) => {
         try {
             const code = c.req.param('code');
+            if (!/^[A-Za-z0-9]{4,64}$/.test(code)) return c.text('Short URL not found', 404);
             const shortLinks = requireShortLinkService(services.shortLinks);
             const originalParam = await shortLinks.resolveShortCode(code);
             if (!originalParam) return c.text('Short URL not found', 404);
@@ -383,6 +388,7 @@ export function createApp(bindings = {}) {
             const prefix = pathParts[1];
             const shortCode = pathParts[2];
             if (!['b', 'c', 'x', 's'].includes(prefix)) return c.text(t('invalidShortUrl'), 400);
+            if (!/^[A-Za-z0-9]{4,64}$/.test(shortCode)) return c.text(t('invalidShortUrl'), 400);
 
             const shortLinks = requireShortLinkService(services.shortLinks);
             const originalParam = await shortLinks.resolveShortCode(shortCode);

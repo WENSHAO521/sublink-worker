@@ -14,8 +14,9 @@ export class UpstashKVAdapter {
 
     async put(key, value, options = {}) {
         const command = ['SET', key, value];
-        if (options.expirationTtl) {
-            command.push('EX', String(Math.floor(options.expirationTtl)));
+        const ttl = normalizeTtl(options.expirationTtl);
+        if (ttl !== null) {
+            command.push('EX', String(ttl));
         }
         await this.execute(command);
     }
@@ -44,4 +45,10 @@ export class UpstashKVAdapter {
         }
         return payload.result;
     }
+}
+
+function normalizeTtl(ttl) {
+    if (!ttl && ttl !== 0) return null;
+    const parsed = Math.floor(Number(ttl));
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
 }

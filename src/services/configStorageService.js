@@ -35,8 +35,11 @@ export class ConfigStorageService {
         const configId = `${type}_${generateWebPath(8)}`;
         const configString = this.serializeConfig(type, content);
 
-        // Validate string is JSON before storing
-        JSON.parse(configString);
+        try {
+            JSON.parse(configString);
+        } catch {
+            throw new InvalidPayloadError('Config content is not valid JSON');
+        }
 
         const ttlSeconds = this.options.configTtlSeconds;
         const putOptions = ttlSeconds ? { expirationTtl: ttlSeconds } : undefined;

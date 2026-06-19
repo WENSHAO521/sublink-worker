@@ -7,11 +7,11 @@ import { RedisKVAdapter } from '../adapters/kv/redisKv.js';
 export function createVercelRuntime(env = process.env) {
     return {
         kv: resolveKv(env),
-        assetFetcher: createFileAssetFetcher('public'),
+        assetFetcher: createFileAssetFetcher(env.STATIC_DIR || 'public'),
         logger: console,
         config: {
-            configTtlSeconds: undefined,
-            shortLinkTtlSeconds: null
+            configTtlSeconds: parseNumber(env.CONFIG_TTL_SECONDS) || undefined,
+            shortLinkTtlSeconds: parseNumber(env.SHORT_LINK_TTL_SECONDS) || null
         }
     };
 }
@@ -80,4 +80,10 @@ function buildCommonRedisOptions(env) {
         options.tls = {};
     }
     return options;
+}
+
+function parseNumber(value) {
+    if (!value) return null;
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
 }
