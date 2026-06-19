@@ -1,5 +1,5 @@
 import { html } from 'hono/html'
-import { APP_KEYWORDS } from '../constants.js';
+import { APP_KEYWORDS, APP_FULL_NAME } from '../constants.js';
 
 export const Layout = (props) => {
   const { title, children } = props
@@ -10,8 +10,9 @@ export const Layout = (props) => {
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>${title}</title>
-        <meta name="description" content="Convert and optimize your subscription links easily" />
+        <meta name="description" content="${APP_FULL_NAME} — Convert and optimize your subscription links" />
         <meta name="keywords" content="${APP_KEYWORDS}" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <script src="https://cdn.tailwindcss.com"></script>
@@ -39,75 +40,180 @@ export const Layout = (props) => {
               extend: {
                 colors: {
                   primary: {
-                    50: '#eef9ff',
-                    100: '#dcf2ff',
-                    200: '#b2e6ff',
-                    300: '#6ed4ff',
-                    400: '#33c5ff', // Spaceship Blue
-                    500: '#0aa3eb',
-                    600: '#0082ca',
-                    700: '#0068a3',
-                    800: '#005887',
-                    900: '#06496f',
-                    950: '#042f4a',
+                    50:  '#EBF5FF',
+                    100: '#D6EAFF',
+                    200: '#ADD6FF',
+                    300: '#70B8FF',
+                    400: '#3D9FFF',
+                    500: '#007AFF',
+                    600: '#0063CC',
+                    700: '#004EA3',
+                    800: '#003B7A',
+                    900: '#002851',
+                    950: '#001533',
                   },
-                  gray: {
-                    850: '#1f2937',
-                    900: '#111827',
-                    950: '#0b0f19', // Deep dark for background
+                  psg: {
+                    purple: '#5856D6',
+                    teal:   '#5AC8FA',
+                    green:  '#30D158',
                   }
                 },
                 fontFamily: {
-                  sans: ['Inter', 'sans-serif'],
+                  sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"Segoe UI"', 'Inter', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                },
+                borderRadius: {
+                  '4xl': '2rem',
+                },
+                backdropBlur: {
+                  '2xl': '40px',
+                  '3xl': '60px',
                 }
               }
             }
           }
         </script>
         <style>
+          /* ── Base ── */
           body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            position: relative;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Inter, Roboto, 'Helvetica Neue', Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             min-height: 100vh;
+            background-color: #F2F2F7;
           }
+          html.dark body { background-color: #000000; }
 
-          /* Subtle radial gradient background */
+          /* ── Ambient gradient orbs ── */
           body::before {
             content: '';
             position: fixed;
             inset: 0;
             z-index: -2;
-            background:
-              radial-gradient(ellipse 80% 50% at 50% -20%, rgba(10, 163, 235, 0.08) 0%, transparent 60%),
-              radial-gradient(ellipse 60% 40% at 90% 80%, rgba(51, 197, 255, 0.05) 0%, transparent 50%),
-              radial-gradient(ellipse 50% 30% at 10% 90%, rgba(0, 130, 202, 0.04) 0%, transparent 50%);
             pointer-events: none;
+            background:
+              radial-gradient(ellipse 130% 80% at 50% -20%, rgba(0,122,255,0.14) 0%, transparent 65%),
+              radial-gradient(ellipse 80%  60% at 95% 110%, rgba(88,86,214,0.10) 0%, transparent 55%),
+              radial-gradient(ellipse 60%  50% at  0% 80%,  rgba(90,200,250,0.07) 0%, transparent 50%);
           }
-
-          .dark body::before,
           html.dark body::before {
             background:
-              radial-gradient(ellipse 80% 50% at 50% -20%, rgba(10, 163, 235, 0.12) 0%, transparent 60%),
-              radial-gradient(ellipse 60% 40% at 90% 80%, rgba(51, 197, 255, 0.06) 0%, transparent 50%),
-              radial-gradient(ellipse 50% 30% at 10% 90%, rgba(0, 130, 202, 0.05) 0%, transparent 50%);
+              radial-gradient(ellipse 130% 80% at 50% -20%, rgba(0,122,255,0.22) 0%, transparent 65%),
+              radial-gradient(ellipse 80%  60% at 95% 110%, rgba(88,86,214,0.18) 0%, transparent 55%),
+              radial-gradient(ellipse 60%  50% at  0% 80%,  rgba(90,200,250,0.10) 0%, transparent 50%);
           }
 
-          /* Subtle noise texture overlay */
-          body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-            opacity: 0.3;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 128px 128px;
+          /* ── Glass cards ── */
+          .glass-card {
+            background: rgba(255,255,255,0.72);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 2px 24px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(255,255,255,0.8) inset;
+            border-radius: 1.25rem;
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+          }
+          .glass-card:hover {
+            box-shadow: 0 6px 36px rgba(0,0,0,0.10), 0 0 0 0.5px rgba(255,255,255,0.9) inset;
+          }
+          html.dark .glass-card {
+            background: rgba(28,28,30,0.75);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 2px 24px rgba(0,0,0,0.45);
+          }
+          html.dark .glass-card:hover {
+            box-shadow: 0 6px 36px rgba(0,0,0,0.60);
           }
 
-          .dark body::after,
-          html.dark body::after {
-            opacity: 0.15;
+          /* ── Glass navbar ── */
+          .glass-nav {
+            background: rgba(242,242,247,0.85);
+            backdrop-filter: saturate(180%) blur(28px);
+            -webkit-backdrop-filter: saturate(180%) blur(28px);
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+          }
+          html.dark .glass-nav {
+            background: rgba(0,0,0,0.75);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+          }
+
+          /* ── Glass inputs ── */
+          .glass-input {
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.10);
+            transition: border-color 0.2s, box-shadow 0.2s;
+          }
+          .glass-input:focus {
+            outline: none;
+            border-color: rgba(0,122,255,0.6);
+            box-shadow: 0 0 0 3px rgba(0,122,255,0.12);
+          }
+          html.dark .glass-input {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: #f5f5f7;
+          }
+          html.dark .glass-input:focus {
+            border-color: rgba(0,122,255,0.7);
+            box-shadow: 0 0 0 3px rgba(0,122,255,0.20);
+          }
+
+          /* ── Glass button (primary) ── */
+          .glass-btn-primary {
+            background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 2px 12px rgba(0,122,255,0.35);
+            transition: box-shadow 0.2s, transform 0.15s, opacity 0.15s;
+          }
+          .glass-btn-primary:hover {
+            box-shadow: 0 4px 20px rgba(0,122,255,0.50);
+            transform: translateY(-1px);
+          }
+          .glass-btn-primary:active { transform: translateY(0); }
+
+          /* ── Glass button (secondary) ── */
+          .glass-btn-secondary {
+            background: rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.08);
+            transition: background 0.2s;
+          }
+          .glass-btn-secondary:hover { background: rgba(0,122,255,0.08); }
+          html.dark .glass-btn-secondary {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.10);
+          }
+          html.dark .glass-btn-secondary:hover { background: rgba(0,122,255,0.15); }
+
+          /* ── Glass footer ── */
+          .glass-footer {
+            background: rgba(242,242,247,0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(0,0,0,0.06);
+          }
+          html.dark .glass-footer {
+            background: rgba(0,0,0,0.5);
+            border-top: 1px solid rgba(255,255,255,0.07);
+          }
+
+          /* ── PSG logo gradient text ── */
+          .psg-gradient-text {
+            background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+
+          /* ── Section label ── */
+          .section-icon {
+            background: linear-gradient(135deg, rgba(0,122,255,0.12) 0%, rgba(88,86,214,0.12) 100%);
+            color: #007AFF;
+          }
+          html.dark .section-icon {
+            background: linear-gradient(135deg, rgba(0,122,255,0.20) 0%, rgba(88,86,214,0.20) 100%);
+            color: #3D9FFF;
           }
 
           [x-cloak] { display: none !important; }
@@ -133,7 +239,6 @@ export const Layout = (props) => {
             }
           }
 
-          // Version update checker Alpine.js component
           function updateChecker(currentVersion, apiUrl) {
             return {
               currentVersion: currentVersion,
@@ -143,44 +248,30 @@ export const Layout = (props) => {
                 newVersionAvailable: getUpdateI18n('newVersionAvailable'),
                 currentVersion: getUpdateI18n('currentVersion'),
                 viewRelease: getUpdateI18n('viewRelease'),
-                updateGuide: getUpdateI18n('updateGuide'),
                 later: getUpdateI18n('later')
               },
               init() {
-                // Check for updates after a short delay to not block initial render
                 setTimeout(() => this.checkForUpdates(), 3000);
               },
               async checkForUpdates() {
                 try {
-                  // Check if user dismissed this version before
-                  const dismissedVersion = localStorage.getItem('sublink_dismissed_version');
-                  const lastCheck = localStorage.getItem('sublink_last_version_check');
+                  const dismissedVersion = localStorage.getItem('psg_dismissed_version');
+                  const lastCheck = localStorage.getItem('psg_last_version_check');
                   const now = Date.now();
-                  
-                  // Only check once per hour to avoid rate limiting
                   if (lastCheck && (now - parseInt(lastCheck)) < 3600000) {
-                    const cachedVersion = localStorage.getItem('sublink_latest_version');
+                    const cachedVersion = localStorage.getItem('psg_latest_version');
                     if (cachedVersion && cachedVersion !== dismissedVersion && this.compareVersions(cachedVersion, this.currentVersion) > 0) {
                       this.latestVersion = cachedVersion;
                       this.showUpdateToast = true;
                     }
                     return;
                   }
-
-                  const response = await fetch(apiUrl, {
-                    headers: { 'Accept': 'application/vnd.github.v3+json' }
-                  });
-                  
+                  const response = await fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } });
                   if (!response.ok) return;
-                  
                   const data = await response.json();
                   const latestVersion = (data.tag_name || '').replace(/^v/, '');
-                  
-                  // Cache the result
-                  localStorage.setItem('sublink_latest_version', latestVersion);
-                  localStorage.setItem('sublink_last_version_check', now.toString());
-                  
-                  // Compare versions
+                  localStorage.setItem('psg_latest_version', latestVersion);
+                  localStorage.setItem('psg_last_version_check', now.toString());
                   if (latestVersion && latestVersion !== dismissedVersion && this.compareVersions(latestVersion, this.currentVersion) > 0) {
                     this.latestVersion = latestVersion;
                     this.showUpdateToast = true;
@@ -202,57 +293,26 @@ export const Layout = (props) => {
               },
               dismissUpdate() {
                 this.showUpdateToast = false;
-                localStorage.setItem('sublink_dismissed_version', this.latestVersion);
+                localStorage.setItem('psg_dismissed_version', this.latestVersion);
               }
             }
           }
 
-          // i18n helper for update checker
           function getUpdateI18n(key) {
             const lang = navigator.language || 'en-US';
             const translations = {
-              'zh-CN': {
-                newVersionAvailable: '发现新版本',
-                currentVersion: '当前版本',
-                viewRelease: '查看更新',
-                updateGuide: '更新指南',
-                later: '稍后提醒'
-              },
-              'zh-TW': {
-                newVersionAvailable: '發現新版本',
-                currentVersion: '當前版本',
-                viewRelease: '查看更新',
-                updateGuide: '更新指南',
-                later: '稍後提醒'
-              },
-              'en-US': {
-                newVersionAvailable: 'New Version Available',
-                currentVersion: 'Current',
-                viewRelease: 'View Release',
-                updateGuide: 'Update Guide',
-                later: 'Later'
-              },
-              'fa': {
-                newVersionAvailable: 'نسخه جدید موجود است',
-                currentVersion: 'نسخه فعلی',
-                viewRelease: 'مشاهده نسخه',
-                updateGuide: 'راهنمای به‌روزرسانی',
-                later: 'بعداً'
-              },
-              'ru': {
-                newVersionAvailable: 'Доступна новая версия',
-                currentVersion: 'Текущая',
-                viewRelease: 'Посмотреть',
-                updateGuide: 'Руководство по обновлению',
-                later: 'Позже'
-              }
+              'zh-CN': { newVersionAvailable: '发现新版本', currentVersion: '当前版本', viewRelease: '查看更新', later: '稍后' },
+              'zh-TW': { newVersionAvailable: '發現新版本', currentVersion: '當前版本', viewRelease: '查看更新', later: '稍後' },
+              'en-US': { newVersionAvailable: 'New Version Available', currentVersion: 'Current', viewRelease: 'View Release', later: 'Later' },
+              'fa':    { newVersionAvailable: 'نسخه جدید موجود است', currentVersion: 'نسخه فعلی', viewRelease: 'مشاهده نسخه', later: 'بعداً' },
+              'ru':    { newVersionAvailable: 'Доступна новая версия', currentVersion: 'Текущая', viewRelease: 'Посмотреть', later: 'Позже' }
             };
             const langKey = Object.keys(translations).find(k => lang.startsWith(k.split('-')[0])) || 'en-US';
             return translations[langKey][key] || translations['en-US'][key];
           }
         </script>
       </head>
-      <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+      <body class="text-gray-900 dark:text-gray-100 transition-colors duration-300">
         ${children}
       </body>
     </html>
